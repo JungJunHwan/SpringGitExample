@@ -12,17 +12,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import com.example.board.board.service.BoardService;
 import com.example.board.common.filter.LoginInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer{
-
-    private final BoardService boardService;
-
-    WebMvcConfig(BoardService boardService) {
-        this.boardService = boardService;
-    }
 
 	@Bean(value="localeResolver")
 	LocaleResolver localeResolver() {

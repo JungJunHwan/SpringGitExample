@@ -92,7 +92,7 @@ public class MemberController {
                 session.setAttribute("userid", userid);
                 session.setAttribute("name", member.getName());
                 session.setAttribute("email", member.getEmail());
-                return "redirect:/home";
+                return "redirect:/";
             } else {
                 session.invalidate();
                 model.addAttribute("message", "WRONG_PASSWORD");
@@ -101,13 +101,13 @@ public class MemberController {
             session.invalidate();
             model.addAttribute("message", "USER_NOT_FOUND");
         }
-        return "member/login";
+        return "redirect:/";
     }
 
     @GetMapping(value="/member/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/home";
+        return "redirect:/";
     }
 
     @GetMapping(value="/member/update")
@@ -131,7 +131,7 @@ public class MemberController {
         try {
             memberService.updateMember(member);
             session.setAttribute("email", member.getEmail());
-            return "redirect:/home";
+            return "redirect:/";
         } catch(Exception e) {
             model.addAttribute("message", e.getMessage());
             return "member/error";
@@ -159,7 +159,7 @@ public class MemberController {
             member.setPassword(password);
             memberService.deleteMember(member);
             session.invalidate();
-            return "redirect:/home";
+            return "redirect:/";
         } else {
             model.addAttribute("message", "WRONG_PASSWORD");
             return "member/delete";
