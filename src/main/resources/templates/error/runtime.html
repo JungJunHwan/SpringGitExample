@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html>
-<head></head> 
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
 <body>
-<div></div>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="container">
 <div class="content">
-	<div class="jumbotron">
-		<h2 style="color:red;">${exception}</h2>
-		<p>Failed URL: ${url}</p>
-		<p>    ${ste} 
-		</p>
-		<p><a class="btn btn-primary" href="/">Home</a></p>
-	</div>
+    <div class="jumbotron">
+        <h2 style="color:red;" th:text="${exception}">예외발생</h2>
+        <p>Failed URL: <span th:text="${url}">예외가 발생한 경로</span></p>
+        <th:block th:each="ste : ${stackTrace}" th:text="${ste+ ' '}">예외 상세 내용</th:block>
+        <p><a class="btn btn-primary" th:href="@{/}">Home</a></p>
+    </div>
 </div>
 </div>
-<footer></footer> 
+<footer th:replace="~{/include/footer :: footer}"></footer>
 </body>
 </html>

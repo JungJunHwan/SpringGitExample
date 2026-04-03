@@ -1,70 +1,79 @@
 <!DOCTYPE html>
-<html>
-<head></head> 
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/include/header :: header}"></head>
 <body>
-<div></div>
+<div th:replace="~{/include/body-header :: bodyHeader}"></div>
 <div class="container">
-	<div class="pg-opt">
-	    <div class="row">
-	        <div class="col-md-6 pc">
-	            <h2><span>BOARD LIST</span> 
-	            <small style="color:red;"></small>
-	            </h2>
-	        </div>
-	        <div class="col-md-6">
-	            <ol class="breadcrumb">
-	                <li>BOARD</li>
-	                <li class="active">BOARD LIST</li>
-	            </ol>
-	        </div>
-	    </div>
+    <div class="pg-opt">
+        <div class="row">
+            <div class="col-md-6 pc">
+                <h2>
+                    <span th:text="#{BOARD_LIST}">BOARD LIST</span>
+                    <small style="color:red;" th:if="${email==null}" th:text="#{LOGIN}"></small>
+                </h2>
+            </div>
+            <div class="col-md-6">
+                <ol class="breadcrumb">
+                    <li th:text="#{BOARD}">BOARD</li>
+                    <li class="active" th:text="#{BOARD_LIST}">BOARD LIST</li>
+                </ol>
+            </div>
+        </div>
     </div>
-	<span>message</span>
-	<div class="content">
-		<form action="/board/search/1" method="get">
-			<div class="pull-right" style="margin-bottom: 5px;">
-			<div class="col-xs-9">
-		        <input type="text" name="keyword" class="form-control">
-		    </div>
-		        <input type="submit" class="btn btn-warning">
-			</div>
-		</form>
-	    <table class="table table-hover table-bordered">
-		<thead>
-		<tr>
-			<td>BOARD ID</td>
-			<td class="pc">WRITER</td>
-			<td>SUBJECT</td>
-			<td class="pc">WRITE DATE</td>
-			<td class="pc">READ COUNT</td>
-		</tr>
-		</thead>
-		<tr>
-			<td>ID</td>
-			<td class="pc">작성자</td>
-			<td>
-			<span>
-				<span>&nbsp;</span>
-				<span>└</span>
-			</span>
-			<a href="/board/">제목</a>
-			</td>
-			<td class="pc">YYYY-MM-dd</td>
-			<td class="pc">0</td>
-		</tr>
-		</table>
-		<table class="table">
-		<tr>
-			<td align="left">
-				<div></div> 
-			</td>
-			<td align="right">
-				<a href="board/write/1"><button type="button" class="btn btn-info">WRITE NEW ARTICLE</button></a>
-			</td>
-		</tr>
-		</table>
-	</div>
+    
+    <span th:text="${message}">message</span>
+    
+    <div class="content">
+        <form th:action="@{/board/search/1}" method="get">
+            <div class="pull-right" style="margin-bottom: 5px;">
+                <div class="col-xs-9">
+                    <input type="text" name="keyword" class="form-control">
+                </div>
+                <input type="submit" class="btn btn-warning" th:value="#{SEARCH}">
+            </div>
+        </form>
+        
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <td th:text="#{BOARD_ID}">BOARD ID</td>
+                    <td class="pc" th:text="#{WRITER}">WRITER</td>
+                    <td th:text="#{SUBJECT}">SUBJECT</td>
+                    <td class="pc" th:text="#{WRITE_DATE}">WRITE DATE</td>
+                    <td class="pc" th:text="#{READ_COUNT}">READ COUNT</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="board : ${boardList}">
+                    <td th:text="${board.boardId}">ID</td>
+                    <td class="pc" th:text="${board.writer}">작성자</td>
+                    <td>
+                        <span th:if="${board.replyNumber > 0}">
+                            <span th:each="num : ${#numbers.sequence(1, board.replyStep)}">&nbsp;</span>
+                            <span>ㄴ</span>
+                        </span>
+                        <a th:href="@{/board/__${board.boardId}__/__${session.page}__}" th:text="${board.title}">제목</a>
+                    </td>
+                    <td class="pc" th:text="${#dates.format(board.writeDate, 'yyyy-MM-dd')}">YYYY-MM-dd</td>
+                    <td class="pc" th:text="${board.readCount}">0</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="table">
+            <tr>
+                <td align="left">
+                    <div th:replace="~{/include/paging :: paging}"></div>
+                </td>
+                <td align="right">
+                    <a th:href="@{/board/write/__${categoryId}__}">
+                        <button type="button" class="btn btn-info" th:text="#{WRITE_NEW_ARTICLE}">WRITE NEW ARTICLE</button>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-<footer></footer> 
+<footer th:replace="~{/include/footer :: footer}"></footer>
 </body>
 </html>
